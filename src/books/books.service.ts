@@ -13,19 +13,23 @@ export class BooksService {
   ) {}
 
   async findAll(): Promise<Book[]> {
-    return this.bookRepository.find();
+    return this.bookRepository.find({ where: { isDeleted: false }});
   }
 
   async findById(id: number): Promise<Book> {
-    return this.bookRepository.findOne({ where: { id } });
+    return this.bookRepository.findOne({ where: { id, isDeleted: false } });
   }
 
   async findByISBN(isbn: string): Promise<Book> {
-    return this.bookRepository.findOne({ where: { isbn } });
+    return this.bookRepository.findOne({ where: { isbn, isDeleted: false } });
   }
 
   async create(book: CreateBookDto): Promise<Book> {
-    const newbook = this.bookRepository.create(book);
+    const newbook = this.bookRepository.create({
+      title: book.title,
+      isbn: book.isbn,
+      isDeleted: false
+    });
     return this.bookRepository.save(newbook);
   }
 
@@ -35,6 +39,8 @@ export class BooksService {
   }
 
   async delete(id: number): Promise<void> {
-    await this.bookRepository.delete(id);
+    await this.bookRepository.update(id, {
+      isDeleted: true
+    });
   }
 }

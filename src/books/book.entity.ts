@@ -11,4 +11,7 @@ export class Book {
 
   @Column()
   isbn: string;
+
+  @Column()
+  isDeleted: boolean;
 }

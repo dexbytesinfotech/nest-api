@@ -28,7 +28,10 @@ export class BooksController {
     if (exists) {
       throw new ConflictException('Book exist!');
     }
-    return this.booksService.create(book);
+    return this.booksService.create({
+      title: book.title,
+      isbn: book.isbn
+    });
   }
 
   @Put(':id')
