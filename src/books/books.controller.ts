@@ -1,6 +1,7 @@
 // src/books/book.controller.ts
-import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, NotFoundException, ConflictException } from '@nestjs/common';
 import { Book } from './book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
 import { BooksService } from './books.service';
 
 @Controller('books')
@@ -14,7 +15,7 @@ export class BooksController {
 
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<Book> {
-    const book = await this.booksService.findOne(+id);
+    const book = await this.booksService.findById(+id);
     if (!book) {
       throw new NotFoundException('Book does not exist!');
     }
@@ -22,7 +23,11 @@ export class BooksController {
   }
 
   @Post()
-  create(@Body() book: Book): Promise<Book> {
+  async create(@Body() book: CreateBookDto): Promise<Book> {
+    const exists = await this.booksService.findByISBN(book.isbn);
+    if (exists) {
+      throw new ConflictException('Book exist!');
+    }
     return this.booksService.create(book);
   }
 
@@ -33,7 +38,7 @@ export class BooksController {
 
   @Delete(':id')
   async delete(@Param('id') id: string): Promise<void> {
-    const book = await this.booksService.findOne(+id);
+    const book = await this.booksService.findById(+id);
     if (!book) {
       throw new NotFoundException('Book does not exist!');
     }

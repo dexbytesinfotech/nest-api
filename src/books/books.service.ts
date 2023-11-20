@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Book } from './book.entity';
+import { CreateBookDto } from './dto/create-book.dto';
 
 @Injectable()
 export class BooksService {
@@ -15,11 +16,15 @@ export class BooksService {
     return this.bookRepository.find();
   }
 
-  async findOne(id: number): Promise<Book> {
+  async findById(id: number): Promise<Book> {
     return this.bookRepository.findOne({ where: { id } });
   }
 
-  async create(book: Book): Promise<Book> {
+  async findByISBN(isbn: string): Promise<Book> {
+    return this.bookRepository.findOne({ where: { isbn } });
+  }
+
+  async create(book: CreateBookDto): Promise<Book> {
     const newbook = this.bookRepository.create(book);
     return this.bookRepository.save(newbook);
   }
