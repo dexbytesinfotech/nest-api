@@ -44,6 +44,14 @@ export class BooksService {
     });
   }
 
+  async deleteByIsbn(isbn: string): Promise<void> {
+    await this.bookRepository.update({
+      isbn
+    }, {
+      isDeleted: true
+    });
+  }
+
   async cleanDatabase() {
     if (process.env.NODE_ENV === 'production') return;
     const models = Reflect.ownKeys(this).filter((key) => key[0] !== '_');
