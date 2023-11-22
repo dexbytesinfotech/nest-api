@@ -2,7 +2,7 @@ version: '3.9'
 services:
   nestapp:
     container_name: nestapp
-    image: mithundas79/nestapp:1.0.0
+    image: dexbytes/nestapp:1.0.0
     build: .
     ports:
       - '3000:3000'
@@ -17,6 +17,17 @@ services:
       - db
   db:
     container_name: db
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  testdb:
+    container_name: testdb
     image: postgres:16
     environment:
       POSTGRES_USER: postgres
