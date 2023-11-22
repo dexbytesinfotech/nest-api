@@ -15,4 +15,17 @@ describe('BooksController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+  it('should create a book', () => {
+    const isbn = "ABCD-123";
+    const title = "first book";
+    const newBook = controller.create({
+      isbn, title
+    });
+    expect(newBook).toEqual({
+      id: 1,
+      isbn,
+      title,
+      isDeleted: false,
+    });
+  });
 });

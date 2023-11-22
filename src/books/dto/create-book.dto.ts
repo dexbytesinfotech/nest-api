@@ -18,7 +18,6 @@ import {
   
     @IsNotEmpty()
     @IsString()
-    @IsAlpha()
     @MinLength(1)
     readonly isbn: string;
 
